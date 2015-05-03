@@ -1,28 +1,43 @@
 #!/usr/bin/python3
 
+import os
 from sys import byteorder
 from array import array
 from struct import pack
-
-import pyaudio
 import wave
 
-from libs.trimmer import Trimmer
-from libs.silent_generator import Silent_Generator
-from libs.logger import CustomLogger
+import pyaudio
+print(os.getcwd())
+
+from recorder.libs.trimmer import Trimmer
+from recorder.libs.silent_generator import Silent_Generator
+from common_libs.logger import CustomLogger
+from common_libs.config_reader import ConfigReader
+
+logger = CustomLogger(module=__name__).get_logger()
 
 
 class Recorder():
-    def __init__(self):
-        self._THRESHOLD = 500
-        self._CHUNK_SIZE = 1024
-        self._FORMAT = pyaudio.paInt16
-        self._RATE = 44100
-        self._VOLUME_MAXIMUM = 16384
-        self._CHANNELS = 1
-        self._logger = CustomLogger(module=__name__).get_logger()
-        self._logger.info('logging starts')
+    def __init__(self, **kwargs):
+        self._CONF_FILE_NAME = 'base.cfg'
+        self._SECTION = 'recorder'
 
+        params = self._get_config(**kwargs)
+        self._OUTPUT_FILE_DIR = params['OUTPUT_FILE_DIR']
+        self._FILE_NAME = params['FILE_NAME']
+        self._THRESHOLD = int(params['THRESHOLD'])
+        self._CHUNK_SIZE = int(params['CHUNK_SIZE'])
+        self._FORMAT = pyaudio.paInt16
+        self._RATE = int(params['RATE'])
+        self._VOLUME_MAXIMUM = int(params['VOLUME_MAXIMUM'])
+        self._CHANNELS = int(params['CHANNELS'])
+    
+    def _get_config(self, **kwargs):
+        module_dir = os.path.dirname(os.path.abspath(__file__))
+        local_conf_file = os.path.join(module_dir, self._CONF_FILE_NAME)
+        self._config_reader = ConfigReader(local_conf_file, self._SECTION)
+        return self._config_reader.get_complete_config(**kwargs)
+    
     def _is_silent(self, snd_data):
         return max(snd_data) < self._THRESHOLD
 
@@ -36,26 +51,26 @@ class Recorder():
 
     def _trim(self, snd_data):
         trimmer = Trimmer(self._THRESHOLD)
-        self._logger.info('before trim %s' % snd_data)
+        logger.info('before trim %s' % snd_data)
         r = trimmer.trim_from_start(snd_data)
-        self._logger.info('after trim from start %s' % r)
+        logger.info('after trim from start %s' % r)
         r.reverse()
-        self._logger.info('after reverse %s' % r)
+        logger.info('after reverse %s' % r)
         r = trimmer.trim_from_start(snd_data)
-        self._logger.info('trim from end %s' % r)
+        logger.info('trim from end %s' % r)
         r.reverse()
-        self._logger.info('after reverse %s' % r)
+        logger.info('after reverse %s' % r)
         return r
 
     def _add_silence(self, snd_data, seconds):
-        self._logger.info('before add silence %s' % snd_data)
+        logger.info('before add silence %s' % snd_data)
         sg = Silent_Generator(self._RATE)
         r = array('h', sg.get_silent(seconds))
-        self._logger.info('start silence = %s' % r)
+        logger.info('start silence = %s' % r)
         r.extend(snd_data)
-        self._logger.info('silence + signal = %s' % r)
+        logger.info('silence + signal = %s' % r)
         r.extend(sg.get_silent(seconds))
-        self._logger.info('silence + signal + silence = %s' % r)
+        logger.info('silence + signal + silence = %s' % r)
         return r
 
     def _record(self):
@@ -79,7 +94,7 @@ class Recorder():
                 num_silent += 1
             if not silent and not snd_started:
                 snd_started = True
-            if snd_started and num_silent > 30:
+            if snd_started and num_silent > 150:
                 break
 
         sample_width = p.get_sample_size(self._FORMAT)
@@ -87,21 +102,28 @@ class Recorder():
         stream.close()
         p.terminate()
 
-        self._logger.info('before normalize %s' % r)
+        logger.info('before normalize %s' % r)
         r = self._normalize(r)
-        self._logger.info('after normalize %s' % r)
+        logger.info('after normalize %s' % r)
         r = self._trim(r)
-        self._logger.info('after trim %s' % r)
+        logger.info('after trim %s' % r)
         r = self._add_silence(r, 0.5)
-        self._logger.info('after silence add %s' % r)
+        logger.info('after silence add %s' % r)
 
         return sample_width, r
 
-    def record_to_file(self, path):
+    def record_to_file(self):
         sample_width, data = self._record()
         data = pack('<' + ('h'*len(data)), *data)
+        if __name__ == '__main__':
+            CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+        else:
+            CURRENT_DIR = os.getcwd()
 
-        wf = wave.open(path, 'wb')
+        RECORD_ABS_PATH = os.path.join(CURRENT_DIR,
+                                       self._OUTPUT_FILE_DIR,
+                                       self._FILE_NAME)
+        wf = wave.open(RECORD_ABS_PATH, 'wb')
         wf.setnchannels(self._CHANNELS)
         wf.setsampwidth(sample_width)
         wf.setframerate(self._RATE)
@@ -112,5 +134,5 @@ class Recorder():
 if __name__ == '__main__':
     recorder = Recorder()
     print('say something')
-    recorder.record_to_file('custom.wav')
+    recorder.record_to_file()
     print('end of record')
