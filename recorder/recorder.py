@@ -14,7 +14,7 @@ from recorder.libs.silent_generator import Silent_Generator
 from common_libs.logger import CustomLogger
 from common_libs.config_reader import ConfigReader
 
-logger = CustomLogger(module=__name__).get_logger()
+logger = CustomLogger(filename='./recorder.log').get_logger(module=__name__)
 
 
 class Recorder():
@@ -52,11 +52,11 @@ class Recorder():
     def _trim(self, snd_data):
         trimmer = Trimmer(self._THRESHOLD)
         logger.info('before trim %s' % snd_data)
-        r = trimmer.trim_from_start(snd_data)
+        r = trimmer.trim_from_left(snd_data)
         logger.info('after trim from start %s' % r)
         r.reverse()
         logger.info('after reverse %s' % r)
-        r = trimmer.trim_from_start(snd_data)
+        r = trimmer.trim_from_left(r)
         logger.info('trim from end %s' % r)
         r.reverse()
         logger.info('after reverse %s' % r)
@@ -92,9 +92,9 @@ class Recorder():
 
             if silent and snd_started:
                 num_silent += 1
-            if not silent and not snd_started:
+            elif not silent and not snd_started:
                 snd_started = True
-            if snd_started and num_silent > 150:
+            if snd_started and num_silent > 30:
                 break
 
         sample_width = p.get_sample_size(self._FORMAT)

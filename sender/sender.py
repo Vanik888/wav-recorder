@@ -5,7 +5,7 @@ from random import randint
 from common_libs.logger import CustomLogger
 from common_libs.config_reader import ConfigReader
 
-logger = CustomLogger(module=__name__).get_logger()
+logger = CustomLogger().get_logger(module=__name__)
 logger.info('started')
 
 

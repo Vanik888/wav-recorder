@@ -6,7 +6,7 @@ from common_libs.logger import CustomLogger
 from recorder.recorder import Recorder
 from sender.sender import Sender
 
-logger = CustomLogger(module=__name__).get_logger()
+logger = CustomLogger().get_logger(module=__name__)
 
 
 class Analyzer():
