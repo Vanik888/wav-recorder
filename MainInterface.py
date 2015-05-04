@@ -9,7 +9,7 @@ from sender.sender import Sender
 logger = CustomLogger().get_logger(module=__name__)
 
 
-class Analyzer():
+class MainInterface():
     def __init__(self):
         self._config_parser = ConfigParser()
         self._read_config()
@@ -34,6 +34,6 @@ class Analyzer():
         self._sender.send()
 
 if __name__ == '__main__':
-    analyzer = Analyzer()
+    analyzer = MainInterface()
     analyzer.record_to_file()
     analyzer.send()
