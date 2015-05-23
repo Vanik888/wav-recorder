@@ -6,12 +6,11 @@ from common_libs.logger import CustomLogger
 from common_libs.config_reader import ConfigReader
 
 logger = CustomLogger().get_logger(module=__name__)
-logger.info('started')
 
 
 class Sender():
     def __init__(self, **kwargs):
-        self._CONF_FILE_NAME = 'base.cfg'
+        self._CONF_FILE_NAME = 'global.cfg'
         self._SECTION = 'sender'
 
         params = self._get_config(**kwargs)
@@ -27,9 +26,8 @@ class Sender():
                     '%(OUTPUT_FILE_DIR)s/result.xml'
 
     def _get_config(self, **kwargs):
-        module_dir = os.path.dirname(os.path.abspath(__file__))
-        local_conf_file = os.path.join(module_dir, self._CONF_FILE_NAME)
-        self._config_reader = ConfigReader(local_conf_file, self._SECTION)
+        conf_file = os.path.join(os.getcwd(), self._CONF_FILE_NAME)
+        self._config_reader = ConfigReader(conf_file, self._SECTION)
         return self._config_reader.get_complete_config(**kwargs)
 
     def _generate_uuid(self):
@@ -43,13 +41,11 @@ class Sender():
                                   'INPUT_FILE_DIR': self._INPUT_FILE_DIR,
                                   'FILE_NAME': self._FILE_NAME,
                                   'OUTPUT_FILE_DIR': self._OUTPUT_FILE_DIR}
-        logger.info(FILLED_CMD)
-        os.system('pwd')
-        os.system('ls -ls')
-        logger.info('start curl command')
+        logger.info('This is full ourl command %s' % FILLED_CMD)
+        logger.info('Start curl command')
         # os.system('curl yandex.ru > self._OUTPUT_FILE_DIR/result.xml')
         os.system(FILLED_CMD)
-        logger.info(os.path)
+        logger.info('Ends curl command')
 
 
 if __name__ == '__main__':

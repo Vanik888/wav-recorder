@@ -4,6 +4,7 @@ import os
 from sys import byteorder
 from array import array
 from struct import pack
+from logging import DEBUG as LEV
 import wave
 
 import pyaudio
@@ -14,12 +15,12 @@ from recorder.libs.silent_generator import Silent_Generator
 from common_libs.logger import CustomLogger
 from common_libs.config_reader import ConfigReader
 
-logger = CustomLogger(filename='./recorder.log').get_logger(module=__name__)
+logger = CustomLogger().get_logger(module=__name__)
 
 
 class Recorder():
     def __init__(self, **kwargs):
-        self._CONF_FILE_NAME = 'base.cfg'
+        self._CONF_FILE_NAME = 'global.cfg'
         self._SECTION = 'recorder'
 
         params = self._get_config(**kwargs)
@@ -33,9 +34,8 @@ class Recorder():
         self._CHANNELS = int(params['CHANNELS'])
     
     def _get_config(self, **kwargs):
-        module_dir = os.path.dirname(os.path.abspath(__file__))
-        local_conf_file = os.path.join(module_dir, self._CONF_FILE_NAME)
-        self._config_reader = ConfigReader(local_conf_file, self._SECTION)
+        conf_file = os.path.join(os.getcwd(), self._CONF_FILE_NAME)
+        self._config_reader = ConfigReader(conf_file, self._SECTION)
         return self._config_reader.get_complete_config(**kwargs)
     
     def _is_silent(self, snd_data):
@@ -51,26 +51,26 @@ class Recorder():
 
     def _trim(self, snd_data):
         trimmer = Trimmer(self._THRESHOLD)
-        logger.info('before trim %s' % snd_data)
+        logger.debug('before trim %s' % snd_data)
         r = trimmer.trim_from_left(snd_data)
-        logger.info('after trim from start %s' % r)
+        logger.debug('after trim from start %s' % r)
         r.reverse()
-        logger.info('after reverse %s' % r)
+        logger.debug('after reverse %s' % r)
         r = trimmer.trim_from_left(r)
-        logger.info('trim from end %s' % r)
+        logger.debug('trim from end %s' % r)
         r.reverse()
-        logger.info('after reverse %s' % r)
+        logger.debug('after reverse %s' % r)
         return r
 
     def _add_silence(self, snd_data, seconds):
-        logger.info('before add silence %s' % snd_data)
+        logger.debug('before add silence %s' % snd_data)
         sg = Silent_Generator(self._RATE)
         r = array('h', sg.get_silent(seconds))
-        logger.info('start silence = %s' % r)
+        logger.debug('start silence = %s' % r)
         r.extend(snd_data)
-        logger.info('silence + signal = %s' % r)
+        logger.debug('silence + signal = %s' % r)
         r.extend(sg.get_silent(seconds))
-        logger.info('silence + signal + silence = %s' % r)
+        logger.debug('silence + signal + silence = %s' % r)
         return r
 
     def _record(self):
@@ -82,6 +82,8 @@ class Recorder():
         snd_started = False
 
         r = array('h')
+
+        print("Say command")
         while True:
             snd_data = array('h', stream.read(self._CHUNK_SIZE))
             if byteorder == 'big':
@@ -94,35 +96,40 @@ class Recorder():
                 num_silent += 1
             elif not silent and not snd_started:
                 snd_started = True
+                logger.info('Starts record to array')
             if snd_started and num_silent > 30:
+                logger.info('Ends record to array')
                 break
 
         sample_width = p.get_sample_size(self._FORMAT)
         stream.stop_stream()
         stream.close()
         p.terminate()
+        logger.info('Array is recorded')
 
-        logger.info('before normalize %s' % r)
+        logger.debug('before normalize %s' % r)
+        logger.info('Array len = %s' % len(r))
         r = self._normalize(r)
-        logger.info('after normalize %s' % r)
+        logger.debug('after normalize %s' % r)
+        logger.info('Array len = %s' % len(r))
         r = self._trim(r)
-        logger.info('after trim %s' % r)
+        logger.debug('after trim %s' % r)
+        logger.info('Array len = %s' % len(r))
         r = self._add_silence(r, 0.5)
-        logger.info('after silence add %s' % r)
+        logger.debug('after silence add %s' % r)
+        logger.info('Array len = %s' % len(r))
 
         return sample_width, r
 
     def record_to_file(self):
         sample_width, data = self._record()
         data = pack('<' + ('h'*len(data)), *data)
-        if __name__ == '__main__':
-            CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        else:
-            CURRENT_DIR = os.getcwd()
-
-        RECORD_ABS_PATH = os.path.join(CURRENT_DIR,
+        RECORD_ABS_PATH = os.path.join(os.getcwd(),
                                        self._OUTPUT_FILE_DIR,
                                        self._FILE_NAME)
+        logger.info('will be saved in %s' % RECORD_ABS_PATH)
+        # TODO-vanik: remove next line
+        # print('record file in %s' % RECORD_ABS_PATH)
         wf = wave.open(RECORD_ABS_PATH, 'wb')
         wf.setnchannels(self._CHANNELS)
         wf.setsampwidth(sample_width)

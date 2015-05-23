@@ -3,6 +3,12 @@ class Result():
         self._confidence = confidence
         self._value = value
 
+    def __str__(self):
+        return 'value = %s; confidence = %s;' % (self._value, self._confidence)
+
+    def __repr__(self):
+        return 'value = %s; confidence = %s;' % (self._value, self._confidence)
+
     def get_confidence(self):
         return self._confidence
 

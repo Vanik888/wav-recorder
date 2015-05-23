@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import os
 
 from common_libs.logger import CustomLogger
-from .result import Result
+from analyzer.libs.result import Result
 
 logger = CustomLogger().get_logger(module=__name__)
 
