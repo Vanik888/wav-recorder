@@ -39,7 +39,7 @@ class Recorder():
         return self._config_reader.get_complete_config(**kwargs)
     
     def _is_silent(self, snd_data):
-        return max(snd_data) < self._THRESHOLD
+        return max(abs(i) for i in snd_data) < self._THRESHOLD
 
     def _normalize(self, snd_data):
         times = float(self._VOLUME_MAXIMUM)/max(abs(i) for i in snd_data)
@@ -50,7 +50,7 @@ class Recorder():
         return r
 
     def _trim(self, snd_data):
-        trimmer = Trimmer(self._THRESHOLD)
+        trimmer = Trimmer(self._THRESHOLD, self._RATE)
         logger.debug('before trim %s' % snd_data)
         r = trimmer.trim_from_left(snd_data)
         logger.debug('after trim from start %s' % r)
@@ -106,14 +106,13 @@ class Recorder():
         stream.close()
         p.terminate()
         logger.info('Array is recorded')
-
+        logger.info('Array len = %s' % len(r))
+        r = self._trim(r)
+        logger.debug('after trim %s' % r)
         logger.debug('before normalize %s' % r)
         logger.info('Array len = %s' % len(r))
         r = self._normalize(r)
         logger.debug('after normalize %s' % r)
-        logger.info('Array len = %s' % len(r))
-        r = self._trim(r)
-        logger.debug('after trim %s' % r)
         logger.info('Array len = %s' % len(r))
         r = self._add_silence(r, 0.5)
         logger.debug('after silence add %s' % r)
