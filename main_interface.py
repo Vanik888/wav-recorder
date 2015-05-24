@@ -37,7 +37,7 @@ class MainInterface():
         self._sender.send()
 
     def analyze(self):
-        self._analyzer.analyze()
+        return self._analyzer.analyze()
 
 if __name__ == '__main__':
     main_program = MainInterface()
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         main_program.record_to_file()
         main_program.send()
         result = main_program.analyze()
-        print(result)
+        logger.info(result)
         if result is not None:
             print('Распознанный код команды %s навание команды %s' % result)
 

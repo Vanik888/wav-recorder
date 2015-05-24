@@ -18,6 +18,7 @@ class Analyzer:
         for item in self._result_list:
             dictionary_id = self._search_word_in_dict(item.get_value())
             if dictionary_id is not None:
+                logger.info("dictionary_id = %s , item_value = %s" % (dictionary_id, item.get_value()))
                 return dictionary_id, item.get_value()
         print("Команду не удалось распознать")
 

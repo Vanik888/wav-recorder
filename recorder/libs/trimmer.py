@@ -3,7 +3,7 @@ class Trimmer():
         self._THRESHOLD = threshold
         self._RATE = rate
         #len of margin in seconds
-        self._MARGIN_LEN = 1
+        self._MARGIN_LEN = 1.5
 
     def trim_from_left(self, snd_data):
         """Обрезает тишину в начале"""
@@ -15,4 +15,4 @@ class Trimmer():
         margin_len = self._MARGIN_LEN * self._RATE
         start_index = 0 if start_index < margin_len else \
             start_index - margin_len
-        return snd_data[start_index:]
+        return snd_data[int(start_index):]
