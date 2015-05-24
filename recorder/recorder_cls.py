@@ -1,14 +1,13 @@
 #!/usr/bin/python3
 
 import os
+import time
 from sys import byteorder
 from array import array
 from struct import pack
-from logging import DEBUG as LEV
 import wave
 
 import pyaudio
-print(os.getcwd())
 
 from recorder.libs.trimmer import Trimmer
 from recorder.libs.silent_generator import Silent_Generator
@@ -43,7 +42,6 @@ class Recorder():
 
     def _normalize(self, snd_data):
         times = float(self._VOLUME_MAXIMUM)/max(abs(i) for i in snd_data)
-
         r = array('h')
         for i in snd_data:
             r.append(int(times*i))
@@ -105,18 +103,18 @@ class Recorder():
         stream.stop_stream()
         stream.close()
         p.terminate()
-        logger.info('Array is recorded')
-        logger.info('Array len = %s' % len(r))
+        logger.debug('Array is recorded')
+        logger.debug('Array len = %s' % len(r))
         r = self._trim(r)
         logger.debug('after trim %s' % r)
         logger.debug('before normalize %s' % r)
-        logger.info('Array len = %s' % len(r))
+        logger.debug('Array len = %s' % len(r))
         r = self._normalize(r)
         logger.debug('after normalize %s' % r)
-        logger.info('Array len = %s' % len(r))
+        logger.debug('Array len = %s' % len(r))
         r = self._add_silence(r, 0.5)
         logger.debug('after silence add %s' % r)
-        logger.info('Array len = %s' % len(r))
+        logger.debug('Array len = %s' % len(r))
 
         return sample_width, r
 
@@ -126,9 +124,9 @@ class Recorder():
         RECORD_ABS_PATH = os.path.join(os.getcwd(),
                                        self._OUTPUT_FILE_DIR,
                                        self._FILE_NAME)
-        logger.info('will be saved in %s' % RECORD_ABS_PATH)
-        # TODO-vanik: remove next line
-        # print('record file in %s' % RECORD_ABS_PATH)
+        logger.debug('will be saved in %s' % RECORD_ABS_PATH)
+        os.remove(RECORD_ABS_PATH)
+
         wf = wave.open(RECORD_ABS_PATH, 'wb')
         wf.setnchannels(self._CHANNELS)
         wf.setsampwidth(sample_width)

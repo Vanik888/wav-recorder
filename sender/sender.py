@@ -1,4 +1,3 @@
-# from .libs.logger import CustomLogger
 import os
 from random import randint
 
@@ -41,9 +40,8 @@ class Sender():
                                   'INPUT_FILE_DIR': self._INPUT_FILE_DIR,
                                   'FILE_NAME': self._FILE_NAME,
                                   'OUTPUT_FILE_DIR': self._OUTPUT_FILE_DIR}
-        logger.info('This is full ourl command %s' % FILLED_CMD)
+        logger.info('This is full curl command %s' % FILLED_CMD)
         logger.info('Start curl command')
-        # os.system('curl yandex.ru > self._OUTPUT_FILE_DIR/result.xml')
         os.system(FILLED_CMD)
         logger.info('Ends curl command')
 
@@ -51,4 +49,3 @@ class Sender():
 if __name__ == '__main__':
     sender = Sender()
     sender.send()
-

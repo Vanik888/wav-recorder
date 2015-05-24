@@ -32,10 +32,8 @@ class Analyzer:
             code, description = line.split('=')
             code = int(code.strip())
             description = description.strip()
-            logger.info("compare"
-                         ": %s ? %s" % (word.upper(), description.upper()))
-            # TODO-vanik: remove next line
-            # print("%s ? %s" % (word.upper(), description.upper()))
+            logger.info("compare: %s ? %s"
+                        % (word.upper(), description.upper()))
             if word.upper() == description.upper():
                 return code
         return None

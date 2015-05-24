@@ -1,6 +1,3 @@
-from array import array
-
-
 class Silent_Generator():
     def __init__(self, rate):
         self._RATE = rate

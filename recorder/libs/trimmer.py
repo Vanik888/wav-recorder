@@ -1,7 +1,3 @@
-
-from array import array
-
-
 class Trimmer():
     def __init__(self, threshold, rate):
         self._THRESHOLD = threshold
@@ -19,13 +15,4 @@ class Trimmer():
         margin_len = self._MARGIN_LEN * self._RATE
         start_index = 0 if start_index < margin_len else \
             start_index - margin_len
-        #
-        # STARTED = False
-        # r = array('h')
-        # for i in snd_data:
-        #     if not STARTED and abs(i) > self._THRESHOLD:
-        #         STARTED = True
-        #         r.append(i)
-        #     elif STARTED:
-        #         r.append(i)
         return snd_data[start_index:]
