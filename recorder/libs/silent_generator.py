@@ -1,4 +1,4 @@
-class Silent_Generator():
+class SilentGenerator():
     def __init__(self, rate):
         self._RATE = rate
 

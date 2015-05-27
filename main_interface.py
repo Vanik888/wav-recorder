@@ -39,14 +39,17 @@ class MainInterface():
     def analyze(self):
         return self._analyzer.analyze()
 
+    def main(self):
+        while True:
+            main_program.record_to_file()
+            main_program.send()
+            result = main_program.analyze()
+            logger.info(result)
+            if result is not None:
+                print('Распознанный код команды %s навание команды %s' % result)
+
 if __name__ == '__main__':
     main_program = MainInterface()
-    while True:
-        main_program.record_to_file()
-        main_program.send()
-        result = main_program.analyze()
-        logger.info(result)
-        if result is not None:
-            print('Распознанный код команды %s навание команды %s' % result)
+    main_program.main()
 
 

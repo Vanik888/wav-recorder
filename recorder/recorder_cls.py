@@ -10,7 +10,7 @@ import wave
 import pyaudio
 
 from recorder.libs.trimmer import Trimmer
-from recorder.libs.silent_generator import Silent_Generator
+from recorder.libs.silent_generator import SilentGenerator
 from common_libs.logger import CustomLogger
 from common_libs.config_reader import ConfigReader
 
@@ -62,7 +62,7 @@ class Recorder():
 
     def _add_silence(self, snd_data, seconds):
         logger.debug('before add silence %s' % snd_data)
-        sg = Silent_Generator(self._RATE)
+        sg = SilentGenerator(self._RATE)
         r = array('h', sg.get_silent(seconds))
         logger.debug('start silence = %s' % r)
         r.extend(snd_data)
