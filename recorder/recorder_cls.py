@@ -125,7 +125,8 @@ class Recorder():
                                        self._OUTPUT_FILE_DIR,
                                        self._FILE_NAME)
         logger.debug('will be saved in %s' % RECORD_ABS_PATH)
-        os.remove(RECORD_ABS_PATH)
+        if os.path.isfile(RECORD_ABS_PATH):
+            os.remove(RECORD_ABS_PATH)
 
         wf = wave.open(RECORD_ABS_PATH, 'wb')
         wf.setnchannels(self._CHANNELS)
