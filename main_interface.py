@@ -31,6 +31,8 @@ class GUI():
         self._result_header = Label(self._working_frame, text='Result:')
         self._result_label = Label(self._working_frame, text='')
 
+        # self._start_btn.pack(fill='both', side='top')
+        # self._stop_btn.pack(fill='both', side='top')
         self._start_btn.place(x=10, y=10, width=40, height=40)
         self._stop_btn.place(x=60, y=10, width=40, height=40)
         self._result_header.place(x=10, y=10, width=40, height=40)

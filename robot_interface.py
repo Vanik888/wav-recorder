@@ -10,8 +10,11 @@ from recorder.recorder_cls import Recorder
 from sender.sender import Sender
 from analyzer.analyzer_cls import Analyzer
 from frames.control_panel import ControlPanel
-
+from frames.dish import DishFrame
+from frames.top_menu_frame import TopMenu
 logger = CustomLogger().get_logger(module=__name__)
+
+frame_size = {'height': 500, 'width':800}
 
 class GUI():
     def __init__(self):
@@ -20,23 +23,21 @@ class GUI():
 
         self._init_speech_detector()
         self._root = Tk()
-        self._root.after(100, func=self._update_result_label)
+        # self._root.after(100, func=self._update_result_label)
 
-        self._control_panel = ControlPanel(root=self._root,
-                                           result_queue=self._result_queue,
-                                           sender=self._sender,
-                                           recorder=self._recorder,
-                                           analyzer=self._analyzer)
-        self._control_panel.frame.pack(side='top', fill='x')
+        # окно с главным меню
+        self._top_menu = TopMenu(root=self._root, frame_size=frame_size)
 
-        self._working_frame = Frame(self._root, height=300, width=600)
-        self._working_frame.pack(side='bottom', fill='both', expand=1)
+        # self._control_panel.frame.pack(side='top', fill='x')
 
-        self._result_header = Label(self._working_frame, text='Result:')
-        self._result_label = Label(self._working_frame, text='')
-
-        self._result_header.place(x=10, y=10, width=40, height=40)
-        self._result_label.place(x=60, y=10, width=200, height=40)
+        # self._working_frame = Frame(self._root, height=300, width=600)
+        # self._working_frame.pack(side='bottom', fill='both', expand=1)
+        #
+        # self._result_header = Label(self._working_frame, text='Result:')
+        # self._result_label = Label(self._working_frame, text='')
+        #
+        # self._result_header.place(x=10, y=10, width=40, height=40)
+        # self._result_label.place(x=60, y=10, width=200, height=40)
 
 
 
