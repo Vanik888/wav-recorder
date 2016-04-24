@@ -2,28 +2,31 @@
 
 import tkinter as tk   # python3
 #import Tkinter as tk   # python
+from tkinter import Tk
+from tkinter import Frame
 
 from frames.start_page import StartPage
+from frames.dish_page import DishPage
 
 TITLE_FONT = ("Helvetica", 18, "bold")
-frame_size = {'height': 500, 'width':800}
+frame_size = {'height': 600, 'width': 900}
 
-class SampleApp(tk.Tk):
+class SampleApp(Tk):
 
     def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+        Tk.__init__(self, *args, **kwargs)
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = tk.Frame(self)
+        container = Frame(self)
         container.pack(side="top", fill="both", expand=True)
 
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage,):
+        for F in (StartPage, DishPage):
             page_name = F.__name__
             frame = F(root=container, controller=self, frame_size=frame_size)
             self.frames[page_name] = frame

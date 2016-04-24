@@ -28,6 +28,7 @@ class GUI():
         # окно с главным меню
         self._top_menu = TopMenu(root=self._root, frame_size=frame_size)
 
+
         # self._control_panel.frame.pack(side='top', fill='x')
 
         # self._working_frame = Frame(self._root, height=300, width=600)

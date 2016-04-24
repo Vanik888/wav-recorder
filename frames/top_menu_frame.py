@@ -29,7 +29,7 @@ class TopMenu():
         self.bill_btn.bind('<Button-1>', self.choose_bill_ev)
 
         self.place_content()
-    
+
     def place_content(self):
         self.dishes_btn.place(x=self.x_pos , y=self.y_diff, **self.buttons_size)
         self.drinks_btn.place(x=self.x_pos, y=2*self.y_diff+self.buttons_size['height'], **self.buttons_size)

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import tkinter as tk
-from tkinter import Button, PhotoImage
+
+from tkinter import Button, PhotoImage, Frame
 
 
-class StartPage(tk.Frame):
+class StartPage(Frame):
     def __init__(self, *args, **kwargs):
-        tk.Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
+        Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
         self._root = kwargs['root']
         self._controller = kwargs['controller']
         self._frame_size = kwargs['frame_size']
@@ -39,11 +39,11 @@ class StartPage(tk.Frame):
         self.service_btn.place(x=self.x_pos, y=3*self.y_diff+2*self.buttons_size['height'], **self.buttons_size)
         self.bill_btn.place(x=self.x_pos, y=4*self.y_diff+3*self.buttons_size['height'], **self.buttons_size)
 
-        # self.pack(side='top', fill='x')
-
     # кликнули на выбор блюда
     def choose_dishes_ev(self, ev):
         print('clicked dishes_btn: %s' % self.dishes_btn.config('text')[-1])
+        self._controller.show_frame("DishPage")
+
 
     # кликнули на выбор напитка
     def choose_drinks_ev(self, ev):
