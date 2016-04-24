@@ -2,6 +2,8 @@
 
 from tkinter import Frame, Button, Label, PhotoImage
 from frames.dish_image_frame import DishImageFrame
+from menu.dishes.tutty_frutty import TuttyFrutty
+from menu.dishes.strabbery_nuts_krep import StrabberyNutsKrep
 
 class DishPage(Frame):
     def __init__(self, *args, **kwargs):
@@ -27,14 +29,35 @@ class DishPage(Frame):
         self.remove_btn = Button(self, text='Убрать', image=self.image, compound='right')
         self.remove_btn.bind('<Button-1>', self.remove_ev)
 
+        self.next_btn = Button(self, text='next', image=self.image, compound='right')
+        self.next_btn.bind('<Button-1>', self.next_ev)
+
+        self.previous_btn = Button(self, text='previous', image=self.image, compound='right')
+        self.previous_btn.bind('<Button-1>', self.previous_ev)
+
         # поле с картинкой
         self.container = Frame(self)
         self._container_size = {'height': 400, 'width': 600}
+        self.child_frame = None
 
         self.frames = {}
-        for F in (DishImageFrame,):
-            page_name = F.__name__
-            frame = F(root=self.container, controller=self, frame_size=self._container_size)
+        self.frames_set = (TuttyFrutty, StrabberyNutsKrep)
+        for i,D in enumerate(self.frames_set):
+            page_name = D.__name__
+            frame = DishImageFrame(root=self.container, controller=self, frame_size=self._container_size, dish=D)
+
+            # проставляем названия следующиего и предыдущего блюда
+            if i == 0:
+                frame.next = self.frames_set[i+1].__name__
+                frame.previous = self.frames_set[len(self.frames_set)-1].__name__
+            elif i == len(self.frames_set)-1:
+                frame.next = self.frames_set[0].__name__
+                frame.previous = self.frames_set[i-1].__name__
+            else:
+                frame.next = self.frames_set[i+1].__name__
+                frame.previous = self.frames_set[i-1].__name__
+
+
             self.frames[page_name] = frame
 
             # put all of the pages in the same location;
@@ -43,8 +66,8 @@ class DishPage(Frame):
             # frame.pack(side='top', fill='x')
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame("DishImageFrame")
 
+        self.show_frame("TuttyFrutty")
 
         self.place_content()
 
@@ -78,6 +101,8 @@ class DishPage(Frame):
         x_diff = (self._frame_size['width'] - self._container_size['width'] - move_btn_size['width']*2) / 4
 
         self.container.place(x=x_diff*2+move_btn_size['width'], y=(header_size['height']+ header_y_pad*2 + click_btn_size['height'] + y_diff*2))
+        self.previous_btn.place(x=x_diff, y=(header_size['height']+ header_y_pad*2 + click_btn_size['height'] + y_diff*2 + self._container_size['height']/2 - move_btn_size['height']/2), **move_btn_size)
+        self.next_btn.place(x=x_diff*3 + move_btn_size['width'] + self._container_size['width'] , y=(header_size['height']+ header_y_pad*2 + click_btn_size['height'] + y_diff*2 + self._container_size['height']/2 - move_btn_size['height']/2), **move_btn_size)
 
 
 
@@ -89,15 +114,32 @@ class DishPage(Frame):
         self._controller.show_frame('StartPage')
 
     def add_ev(self, ev):
+        count = int(self.child_frame.count_lbl.cget('text'))
+        count+=1
+        self.child_frame.count_lbl.config(text=str(count))
         print('clicked add_btn')
 
     def remove_ev(self, ev):
+        count = int(self.child_frame.count_lbl.cget('text'))
+        if count > 0:
+            count-=1
+            self.child_frame.count_lbl.config(text=str(count))
         print('clicked remove_btn')
+
+    def next_ev(self, ev):
+        self.show_frame(self.child_frame.next)
+        print('clicked next_btn')
+
+    def previous_ev(self, ev):
+        self.show_frame(self.child_frame.previous)
+        print('clicked previous_btn')
+
 
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
+        self.child_frame = self.frames[page_name]
+        self.child_frame.tkraise()
+
 
 
