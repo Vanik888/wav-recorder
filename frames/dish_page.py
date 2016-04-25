@@ -4,8 +4,9 @@ from tkinter import Frame, Button, Label, PhotoImage
 from frames.dish_image_frame import DishImageFrame
 from menu.dishes.tutty_frutty import TuttyFrutty
 from menu.dishes.strabbery_nuts_krep import StrabberyNutsKrep
+from frames.comon_frame_mixin import CommonFrameMixin
 
-class DishPage(Frame):
+class DishPage(Frame, CommonFrameMixin):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
         self._root = kwargs['root']
@@ -17,22 +18,32 @@ class DishPage(Frame):
         image_path = './stat/inteface_images/Robot-icon.png'
         self.image = PhotoImage(file=image_path)
 
-        self.speech_btn = Button(self, text='Говорите', image=self.image, compound='right')
+        # Длина сторки с текстом на кнопке
+        btns_txt_len = 20
+
+        self.speech_btn_img = PhotoImage(file='./stat/inteface_images/speak.png')
+        self.speech_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Говорите'), image=self.speech_btn_img, compound='right')
         self.speech_btn.bind('<Button-1>', self.speech_ev)
 
-        self.return_btn = Button(self, text='Назад', image=self.image, compound='right')
+        self.return_btn_img = PhotoImage(file='./stat/inteface_images/back.png')
+        self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right')
         self.return_btn.bind('<Button-1>', self.return_ev)
 
-        self.add_btn = Button(self, text='Добавить', image=self.image, compound='right')
+        self.add_btn_img = PhotoImage(file='./stat/inteface_images/add.png')
+        self.add_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Добавить'), image=self.add_btn_img, compound='right')
         self.add_btn.bind('<Button-1>', self.add_ev)
 
-        self.remove_btn = Button(self, text='Убрать', image=self.image, compound='right')
+        self.remove_btn_img = PhotoImage(file='./stat/inteface_images/remove.png')
+        self.remove_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Убрать'), image=self.remove_btn_img, compound='right')
         self.remove_btn.bind('<Button-1>', self.remove_ev)
 
-        self.next_btn = Button(self, text='next', image=self.image, compound='right')
+
+        self.next_btn_img = PhotoImage(file='./stat/inteface_images/right.png')
+        self.next_btn = Button(self, image=self.next_btn_img)
         self.next_btn.bind('<Button-1>', self.next_ev)
 
-        self.previous_btn = Button(self, text='previous', image=self.image, compound='right')
+        self.previous_btn_img = PhotoImage(file='./stat/inteface_images/left.png')
+        self.previous_btn = Button(self, image=self.previous_btn_img)
         self.previous_btn.bind('<Button-1>', self.previous_ev)
 
         # поле с картинкой

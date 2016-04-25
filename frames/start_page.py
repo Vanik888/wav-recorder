@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from tkinter import Button, PhotoImage, Frame
+from tkinter import Button, PhotoImage, Frame, Label
 
 
 class StartPage(Frame):
@@ -15,20 +15,21 @@ class StartPage(Frame):
         self.buttons_size = {'height': 80, 'width': 400}
         self.x_pos = (self._frame_size['width'] - self.buttons_size['width']) / 2
         self.y_diff = (self._frame_size['height'] - self.buttons_size['height'] * 4) / 5
-        image_path = './stat/inteface_images/Robot-icon.png'
-        self.image = PhotoImage(file=image_path)
 
-
-        self.dishes_btn = Button(self, text='Выбор блюд', image=self.image, compound='right')
+        self.dishes_btn_img = PhotoImage(file='./stat/inteface_images/fork.png')
+        self.dishes_btn = Button(self, text='Выбор блюд    ', image=self.dishes_btn_img, compound='left' )
         self.dishes_btn.bind('<Button-1>', self.choose_dishes_ev)
 
-        self.drinks_btn = Button(self, text='Выбор напитка', image=self.image, compound='right')
+        self.drinks_btn_img = PhotoImage(file='./stat/inteface_images/tea.png')
+        self.drinks_btn = Button(self, text='Выбор напитка ', image=self.drinks_btn_img, compound='left' )
         self.drinks_btn.bind('<Button-1>', self.choose_drinks_ev)
 
-        self.service_btn = Button(self, text='Сервис', image=self.image, compound='right')
+        self.service_btn_img = PhotoImage(file='./stat/inteface_images/key.png')
+        self.service_btn = Button(self, text='Сервис        ', image=self.service_btn_img, compound='left')
         self.service_btn.bind('<Button-1>', self.choose_service_ev)
 
-        self.bill_btn = Button(self, text='Оплата', image=self.image, compound='right')
+        self.bill_btn_img = PhotoImage(file='./stat/inteface_images/money.png')
+        self.bill_btn = Button(self, text='Оплата        ', image=self.bill_btn_img, compound='left')
         self.bill_btn.bind('<Button-1>', self.choose_bill_ev)
 
         self.place_content()

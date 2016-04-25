@@ -11,3 +11,7 @@ class BaseDish():
 
     def get_full_price(self):
         return self.price*self.count
+
+
+
+
