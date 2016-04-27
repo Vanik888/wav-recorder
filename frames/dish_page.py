@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
+
 from tkinter import Frame, Button, Label, PhotoImage
+
 from frames.dish_image_frame import DishImageFrame
 from menu.dishes.tutty_frutty import TuttyFrutty
 from menu.dishes.strabbery_nuts_krep import StrabberyNutsKrep
 from frames.comon_frame_mixin import CommonFrameMixin
+from frames.analyze_frame_mixin import AnalyzeFrameMixin
 
 class DishPage(Frame, CommonFrameMixin):
     def __init__(self, *args, **kwargs):
@@ -12,7 +15,6 @@ class DishPage(Frame, CommonFrameMixin):
         self._root = kwargs['root']
         self._controller = kwargs['controller']
         self._frame_size = kwargs['frame_size']
-
 
         self.header = Label(self, text='Выбор блюда', anchor='se', font=("Helvetica", 16, "bold"))
         image_path = './stat/inteface_images/Robot-icon.png'
@@ -119,22 +121,25 @@ class DishPage(Frame, CommonFrameMixin):
 
     def speech_ev(self, ev):
         print('clicked speech_btn')
+        self._controller.show_frame('SpeechPage')
 
     def return_ev(self, ev):
         print('clicked return_btn')
         self._controller.show_frame('StartPage')
 
     def add_ev(self, ev):
-        count = int(self.child_frame.count_lbl.cget('text'))
-        count+=1
-        self.child_frame.count_lbl.config(text=str(count))
+        self.child_frame.add_dish()
+        # count = int(self.child_frame.count_lbl.cget('text'))
+        # count+=1
+        # self.child_frame.count_lbl.config(text=str(count))
         print('clicked add_btn')
 
     def remove_ev(self, ev):
-        count = int(self.child_frame.count_lbl.cget('text'))
-        if count > 0:
-            count-=1
-            self.child_frame.count_lbl.config(text=str(count))
+        self.child_frame.remove_dish()
+        # count = int(self.child_frame.count_lbl.cget('text'))
+        # if count > 0:
+        #     count-=1
+        #     self.child_frame.count_lbl.config(text=str(count))
         print('clicked remove_btn')
 
     def next_ev(self, ev):

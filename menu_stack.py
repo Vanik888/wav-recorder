@@ -7,6 +7,7 @@ from tkinter import Frame
 
 from frames.start_page import StartPage
 from frames.dish_page import DishPage
+from frames.speech_page import SpeechPage
 
 TITLE_FONT = ("Helvetica", 18, "bold")
 frame_size = {'height': 600, 'width': 900}
@@ -26,7 +27,7 @@ class SampleApp(Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, DishPage):
+        for F in (StartPage, DishPage, SpeechPage):
             page_name = F.__name__
             frame = F(root=container, controller=self, frame_size=frame_size)
             self.frames[page_name] = frame

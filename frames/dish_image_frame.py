@@ -14,23 +14,29 @@ class DishImageFrame(Frame, CommonFrameMixin):
 
         self.image = PhotoImage(file=self.dish.image_path)
 
-        # self.dish_name_lbl = Text(self, text=self.dish.name, font=('Helvetica', 16, 'bold'), justify='left', wraplength=30, wrap='word', bg='white')
-        self.dish_name_lbl = Label(self, text=self.get_name_formated_by_lines(20, self.dish.name), font=('Helvetica', 15, 'bold'), justify='left', anchor='n', bg='white')
-        self.dish_img_lbl = Label(self, image=self.image, compound='right', bg='red')
+        dish_lbl_txt_length = 20
+        self.dish_name_lbl = Label(self, text=self.get_name_formated_by_lines(dish_lbl_txt_length, self.dish.name), font=('Helvetica', 16, 'bold'), anchor='n', bg='white')
+        self.dish_description_lbl = Label(self, text=self.get_name_formated_by_lines(dish_lbl_txt_length, self.dish.description), font=('Helvetica', 14), anchor='n')
+        self.dish_price_lbl = Label(self, text='0 Руб', anchor='nw', font=('Helvetica', 14))
         self.count_lbl = Label(self, text='0', font=('Helvetica', 44, 'bold'), bg='blue')
+        self.dish_img_lbl = Label(self, image=self.image, compound='right', bg='red')
 
         self.place_content()
 
     def place_content(self):
-        txt_lbl_size = {'height': 200, 'width': 250}
+        name_lbl_size = {'height': 80, 'width': 250}
         image_lbl_size = {'height': 400, 'width': 300}
-        count_lbl_size = {'height': 120, 'width': 250}
-        x_diff = (self._frame_size['width'] - txt_lbl_size['width'] - image_lbl_size['width'])/3
+        description_size = {'height': 120, 'width': 250}
+        price_lbl_size = {'height': 40, 'width': 250}
+        count_lbl_size = {'height': 90, 'width': 250}
 
-        self.dish_name_lbl.place(x=x_diff, y=20, **txt_lbl_size)
-        self.dish_img_lbl.place(x=txt_lbl_size['width'] + 2*x_diff, y=0)
+        x_diff = (self._frame_size['width'] - name_lbl_size['width'] - image_lbl_size['width'])/3
+
+        self.dish_name_lbl.place(x=x_diff, y=20, **name_lbl_size)
+        self.dish_img_lbl.place(x=name_lbl_size['width'] + 2*x_diff, y=0)
+        self.dish_description_lbl.place(x=x_diff, y=20+name_lbl_size['height'] + 5, **description_size)
+        self.dish_price_lbl.place(x=x_diff, y=20+name_lbl_size['height'] + 5 + description_size['height'] + 5, **price_lbl_size)
         self.count_lbl.place(x=x_diff, y=self._frame_size['height']-count_lbl_size['height'])
-        print('place_content')
 
     def add_dish(self):
         self.dish.count += 1
@@ -38,8 +44,9 @@ class DishImageFrame(Frame, CommonFrameMixin):
 
     def remove_dish(self):
         if self.dish.count > 0:
-            self.dish -= 1
+            self.dish.count -= 1
             self.update_dish_lbl(count=self.dish.count)
 
     def update_dish_lbl(self, count):
-        self.count_lbl.config(text=str(self.dish.count))
+        self.dish_price_lbl.config(text=str(count*self.dish.price) + ' Руб')
+        self.count_lbl.config(text=str(count))
