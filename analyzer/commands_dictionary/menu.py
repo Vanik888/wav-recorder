@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 menu = {
     'dishes': {
         'TuttyFrutty' : {
@@ -76,7 +74,54 @@ menu = {
             'image_path': './stat/inteface_images/tutty_frutty_400_300.png'
         },
     },
+    'services': {
+        'Napkin' : {
+            'name': "Салфетка",
+            'price': 0,
+            'count': 0,
+            'description': "Салфетка для рук",
+            'image_path': './stat/inteface_images/krep_klubnichno_orekhoviy.png'
+        },
+        'Fork' : {
+            'name': "Вилка",
+            'price': 0,
+            'count': 0,
+            'description': "Принести вилку",
+            'image_path': './stat/inteface_images/tutty_frutty_400_300.png'
+        },
+        'Spoon' : {
+            'name': "Чайная ложка",
+            'price': 0,
+            'count': 0,
+            'description': "Принести чайную ложку",
+            'image_path': './stat/inteface_images/tutty_frutty_400_300.png'
+        },
+        'Tablespoon' : {
+            'name': "Столовая ложка",
+            'price': 0,
+            'count': 0,
+            'description': "Принести столовую ложку",
+            'image_path': './stat/inteface_images/krep_klubnichno_orekhoviy.png'
+        },
+        'Knife' : {
+            'name': "Ножик",
+            'price': 0,
+            'count': 0,
+            'description': "Принести ножик",
+            'image_path': './stat/inteface_images/krep_klubnichno_orekhoviy.png'
+        },
+        'Waiter' : {
+            'name': "Официант",
+            'price': 0,
+            'count': 0,
+            'description': "Вызов официанта",
+            'image_path': './stat/inteface_images/tutty_frutty_400_300.png'
+        },
+    },
+
 }
+# -*- coding: utf-8 -*-
+
 
 
 menu_pages = {

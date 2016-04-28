@@ -8,6 +8,7 @@ from tkinter import Frame
 from frames.start_page import StartPage
 from frames.dish_page import DishPage
 from frames.drinks_page import DrinksPage
+from frames.services_page import ServicesPage
 from frames.speech_page import SpeechPage
 
 TITLE_FONT = ("Helvetica", 18, "bold")
@@ -30,7 +31,7 @@ class SampleApp(Tk):
 
         self.frames = {}
 
-        for F in (StartPage, DishPage, DrinksPage, SpeechPage):
+        for F in (StartPage, DishPage, DrinksPage, ServicesPage, SpeechPage):
             page_name = F.__name__
             frame = F(root=self.container, controller=self, frame_size=frame_size)
             self.frames[page_name] = frame

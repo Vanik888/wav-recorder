@@ -54,6 +54,7 @@ class StartPage(Frame):
     # кликнули на выбор сервиса
     def choose_service_ev(self, ev):
         print('clicked dishes_btn: %s' % self.service_btn.config('text')[-1])
+        self._controller.show_frame("ServicesPage")
 
     # кликнули на выбор счета
     def choose_bill_ev(self, ev):

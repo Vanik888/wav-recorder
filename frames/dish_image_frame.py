@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from tkinter import Frame, PhotoImage, Label, Text
+from tkinter import Frame, PhotoImage, Label
 
 from frames.comon_frame_mixin import CommonFrameMixin
 
