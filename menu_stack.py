@@ -16,20 +16,22 @@ class SampleApp(Tk):
 
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        self.current_frame = None
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
         # will be raised above the others
-        container = Frame(self)
-        container.pack(side="top", fill="both", expand=True)
+        self.container = Frame(self)
+        self.container.pack(side="top", fill="both", expand=True)
 
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
+
         for F in (StartPage, DishPage, SpeechPage):
             page_name = F.__name__
-            frame = F(root=container, controller=self, frame_size=frame_size)
+            frame = F(root=self.container, controller=self, frame_size=frame_size)
             self.frames[page_name] = frame
 
             # put all of the pages in the same location;
@@ -42,8 +44,11 @@ class SampleApp(Tk):
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
+        if page_name == 'SpeechPage':
+            self.frames['SpeechPage'] = SpeechPage(root=self.container, controller=self, frame_size=frame_size)
+            self.frames['SpeechPage'].grid(row=0, column=0, sticky="nsew")
+        self.current_frame = self.frames[page_name]
+        self.current_frame.tkraise()
 
 
 if __name__ == "__main__":

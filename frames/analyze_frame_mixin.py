@@ -42,11 +42,11 @@ class AnalyzeFrameMixin():
     def record_to_file(self):
         self._recorder.record_to_file()
 
-    def send(self):
+    def send_file(self):
         self._sender.send()
 
-    def analyze(self):
-        return self._analyzer.analyze()
+    def analyze(self, where_to_search):
+        return self._analyzer.analyze(where_to_search)
 
     def analyze_work(self, result_queue):
         print('started analyzer proc')

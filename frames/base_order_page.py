@@ -9,15 +9,16 @@ from menu.dishes.strabbery_nuts_krep import StrabberyNutsKrep
 from frames.comon_frame_mixin import CommonFrameMixin
 
 
-class DishPage(Frame, CommonFrameMixin):
+class BaseOrderPage(Frame, CommonFrameMixin):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
         self._root = kwargs['root']
         self._controller = kwargs['controller']
         self._frame_size = kwargs['frame_size']
 
-        self.header = Label(self, text='Выбор блюда', anchor='se', font=("Helvetica", 16, "bold"))
+        header_txt = kwargs['header_txt']
 
+        self.header = Label(self, text=header_txt, anchor='se', font=("Helvetica", 16, "bold"))
 
         # Длина сторки с текстом на кнопке
         btns_txt_len = 20
