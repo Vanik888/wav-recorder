@@ -57,7 +57,6 @@ class BaseOrderPage(Frame, CommonFrameMixin):
         self.child_frame = None
 
         self.frames = {}
-        # self.frames_set = (TuttyFrutty, StrabberyNutsKrep)
         self.frames_set = self.create_orders_set()
 
         for i,f in enumerate(self.frames_set):
@@ -84,8 +83,6 @@ class BaseOrderPage(Frame, CommonFrameMixin):
             # frame.pack(side='top', fill='x')
             frame.grid(row=0, column=0, sticky="nsew")
 
-        one = self.frames_set[0]
-        two = self.frames_set[0].__name__
         self.show_frame((self.frames_set[0]).__name__)
 
         self.place_content()

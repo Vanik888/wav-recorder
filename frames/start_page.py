@@ -49,6 +49,7 @@ class StartPage(Frame):
     # кликнули на выбор напитка
     def choose_drinks_ev(self, ev):
         print('clicked dishes_btn: %s' % self.drinks_btn.config('text')[-1])
+        self._controller.show_frame("DrinksPage")
 
     # кликнули на выбор сервиса
     def choose_service_ev(self, ev):

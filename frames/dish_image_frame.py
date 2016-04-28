@@ -14,7 +14,7 @@ class DishImageFrame(Frame, CommonFrameMixin):
 
         self.image = PhotoImage(file=self.dish.image_path)
 
-        dish_lbl_txt_length = 20
+        dish_lbl_txt_length = 18
         self.dish_name_lbl = Label(self, text=self.get_name_formated_by_lines(dish_lbl_txt_length, self.dish.name), font=('Helvetica', 16, 'bold'), anchor='n', bg='white')
         self.dish_description_lbl = Label(self, text=self.get_name_formated_by_lines(dish_lbl_txt_length, self.dish.description), font=('Helvetica', 14), anchor='n')
         self.dish_price_lbl = Label(self, text='0 Руб', anchor='nw', font=('Helvetica', 14))
