@@ -10,7 +10,7 @@ class DishImageFrame(Frame, CommonFrameMixin):
         self._root = kwargs['root']
         self._controller = kwargs['controller']
         self._frame_size = kwargs['frame_size']
-        self.dish = kwargs['dish']()
+        self.dish = kwargs['dish']
 
         self.image = PhotoImage(file=self.dish.image_path)
 

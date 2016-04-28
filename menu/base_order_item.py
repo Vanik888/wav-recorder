@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-
-
-class BaseDish():
+class BaseOrderItem():
     def __init__(self, name, price, count, description, image_path):
         self.name = name
         self.price = price
@@ -10,19 +8,10 @@ class BaseDish():
         self.description = description
         self.image_path = image_path
 
-# class BaseDish():
-#     def __init__(self, price, count, name, description):
-#         self.price = price
-#         self.count = count
-#         self.name = name
-#         self.description = description
-#
     def reset(self):
         self.count = 0
 
     def get_full_price(self):
         return self.price*self.count
-
-
 
 

@@ -4,9 +4,10 @@
 from tkinter import Frame, Button, Label, PhotoImage
 
 from frames.dish_image_frame import DishImageFrame
-from menu.dishes.tutty_frutty import TuttyFrutty
-from menu.dishes.strabbery_nuts_krep import StrabberyNutsKrep
 from frames.comon_frame_mixin import CommonFrameMixin
+from analyzer.commands_dictionary.menu import menu
+from menu.base_order_item import BaseOrderItem
+
 
 
 class BaseOrderPage(Frame, CommonFrameMixin):
@@ -17,6 +18,8 @@ class BaseOrderPage(Frame, CommonFrameMixin):
         self._frame_size = kwargs['frame_size']
 
         header_txt = kwargs['header_txt']
+        # используется для формирования сета из подменюшек
+        self.order_type = kwargs['order_type']
 
         self.header = Label(self, text=header_txt, anchor='se', font=("Helvetica", 16, "bold"))
 
@@ -54,10 +57,12 @@ class BaseOrderPage(Frame, CommonFrameMixin):
         self.child_frame = None
 
         self.frames = {}
-        self.frames_set = (TuttyFrutty, StrabberyNutsKrep)
-        for i,D in enumerate(self.frames_set):
-            page_name = D.__name__
-            frame = DishImageFrame(root=self.container, controller=self, frame_size=self._container_size, dish=D)
+        # self.frames_set = (TuttyFrutty, StrabberyNutsKrep)
+        self.frames_set = self.create_orders_set()
+
+        for i,f in enumerate(self.frames_set):
+            page_name = f.__name__
+            frame = DishImageFrame(root=self.container, controller=self, frame_size=self._container_size, dish=f)
 
             # проставляем названия следующиего и предыдущего блюда
             if i == 0:
@@ -79,8 +84,9 @@ class BaseOrderPage(Frame, CommonFrameMixin):
             # frame.pack(side='top', fill='x')
             frame.grid(row=0, column=0, sticky="nsew")
 
-
-        self.show_frame("TuttyFrutty")
+        one = self.frames_set[0]
+        two = self.frames_set[0].__name__
+        self.show_frame((self.frames_set[0]).__name__)
 
         self.place_content()
 
@@ -152,6 +158,16 @@ class BaseOrderPage(Frame, CommonFrameMixin):
         '''Show a frame for the given page name'''
         self.child_frame = self.frames[page_name]
         self.child_frame.tkraise()
+
+    # составляет список объектов для перелистывания в подменю
+    def create_orders_set(self):
+        orders_set = ()
+        orders_dict = menu[self.order_type]
+        for k,v in orders_dict.items():
+            item = BaseOrderItem(**v)
+            item.__name__ = k
+            orders_set += (item,)
+        return orders_set
 
 
 
