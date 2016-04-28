@@ -1,83 +1,66 @@
-from configparser import ConfigParser
-from tkinter import Tk, Button, Frame, Label, StringVar
-from multiprocessing import Process, Queue
-from time import sleep
+# -*- coding: utf-8 -*-
 
-import os
+import tkinter as tk   # python3
+#import Tkinter as tk   # python
+from tkinter import Tk
+from tkinter import Frame
 
-from common_libs.logger import CustomLogger
-from recorder.recorder_cls import Recorder
-from sender.sender import Sender
-from analyzer.analyzer_cls import Analyzer
-from frames.control_panel import ControlPanel
-from frames.dish import DishFrame
-from frames.top_menu_frame import TopMenu
-logger = CustomLogger().get_logger(module=__name__)
+from frames.start_page import StartPage
+from frames.dish_page import DishPage
+from frames.drinks_page import DrinksPage
+from frames.services_page import ServicesPage
+from frames.speech_page import SpeechPage
+from frames.payment_page import PaymentPage
 
-frame_size = {'height': 500, 'width':800}
+TITLE_FONT = ("Helvetica", 18, "bold")
+frame_size = {'height': 600, 'width': 900}
 
-class GUI():
-    def __init__(self):
-        print('init called')
-        self._result_queue = Queue()
+class SampleApp(Tk):
 
-        self._init_speech_detector()
-        self._root = Tk()
-        # self._root.after(100, func=self._update_result_label)
+    def __init__(self, *args, **kwargs):
+        Tk.__init__(self, *args, **kwargs)
+        self.current_frame = None
 
-        # окно с главным меню
-        self._top_menu = TopMenu(root=self._root, frame_size=frame_size)
+        # the container is where we'll stack a bunch of frames
+        # on top of each other, then the one we want visible
+        # will be raised above the others
+        self.container = Frame(self)
+        self.container.pack(side="top", fill="both", expand=True)
 
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        # self._control_panel.frame.pack(side='top', fill='x')
+        self.frames = {}
 
-        # self._working_frame = Frame(self._root, height=300, width=600)
-        # self._working_frame.pack(side='bottom', fill='both', expand=1)
-        #
-        # self._result_header = Label(self._working_frame, text='Result:')
-        # self._result_label = Label(self._working_frame, text='')
-        #
-        # self._result_header.place(x=10, y=10, width=40, height=40)
-        # self._result_label.place(x=60, y=10, width=200, height=40)
+        for F in (StartPage, DishPage, DrinksPage, ServicesPage, PaymentPage, SpeechPage):
+            page_name = F.__name__
+            frame = F(root=self.container, controller=self, frame_size=frame_size)
+            self.frames[page_name] = frame
 
+            # put all of the pages in the same location;
+            # the one on the top of the stacking order
+            # will be the one that is visible.
+            # frame.pack(side='top', fill='x')
+            frame.grid(row=0, column=0, sticky="nsew")
 
+        self.show_frame("StartPage")
 
-    # инициализируем систему анализа речи
-    def _init_speech_detector(self):
-        self._config_parser = ConfigParser()
-        self._read_config()
-        self._sender = Sender(**self._get_section_dict('sender'))
-        self._recorder = Recorder(**self._get_section_dict('recorder'))
-        result_file = os.path.join(os.getcwd(), 'stat', 'xmls', 'result.xml')
-        self._analyzer = Analyzer(result_file)
-
-    # читаем конфиг из файла
-    def _read_config(self):
-        CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-        CONFIG_FILE = os.path.join(CURRENT_DIR, 'global.cfg')
-        self._config_parser.read(CONFIG_FILE)
-
-    # возвращаем словарь полей из конфига
-    def _get_section_dict(self, section):
-        dict = {}
-        for item in self._config_parser.items(section):
-            dict[item[0].upper()] = item[1]
-        return dict
-
-    # дергаем очередь на наличие ответа
-    def _update_result_label(self):
-        if not self._result_queue.empty():
-            self._result_label.config(text=self._result_queue.get(), width=200)
-        self._root.after(100, func=self._update_result_label)
+    def show_frame(self, page_name):
+        '''Show a frame for the given page name'''
+        if page_name == 'SpeechPage':
+            self.frames['SpeechPage'] = SpeechPage(root=self.container, controller=self, frame_size=frame_size)
+            self.frames['SpeechPage'].grid(row=0, column=0, sticky="nsew")
+        elif page_name == 'PaymentPage':
+            self.frames['PaymentPage'] = PaymentPage(root=self.container, controller=self, frame_size=frame_size)
+            self.frames['PaymentPage'].grid(row=0, column=0, sticky="nsew")
 
 
-    def start_gui(self):
-        self._root.mainloop()
+        self.current_frame = self.frames[page_name]
+        self.current_frame.tkraise()
 
+    def get_order_pages(self):
+        return [self.frames['DishPage'], self.frames['DrinksPage'], self.frames['ServicesPage']]
 
-
-if __name__ == '__main__':
-    gui = GUI()
-    gui.start_gui()
-
-
+if __name__ == "__main__":
+    app = SampleApp()
+    app.mainloop()

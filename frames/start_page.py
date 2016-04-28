@@ -12,7 +12,7 @@ class StartPage(Frame):
         self._frame_size = kwargs['frame_size']
 
 
-        self.buttons_size = {'height': 80, 'width': 400}
+        self.buttons_size = {'height': 100, 'width': 400}
         self.x_pos = (self._frame_size['width'] - self.buttons_size['width']) / 2
         self.y_diff = (self._frame_size['height'] - self.buttons_size['height'] * 4) / 5
 
