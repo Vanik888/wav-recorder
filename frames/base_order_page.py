@@ -166,5 +166,7 @@ class BaseOrderPage(Frame, CommonFrameMixin):
             orders_set += (item,)
         return orders_set
 
+    def get_orders_set(self):
+        return self.frames_set
 
 

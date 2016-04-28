@@ -10,6 +10,7 @@ from frames.dish_page import DishPage
 from frames.drinks_page import DrinksPage
 from frames.services_page import ServicesPage
 from frames.speech_page import SpeechPage
+from frames.payment_page import PaymentPage
 
 TITLE_FONT = ("Helvetica", 18, "bold")
 frame_size = {'height': 600, 'width': 900}
@@ -31,7 +32,7 @@ class SampleApp(Tk):
 
         self.frames = {}
 
-        for F in (StartPage, DishPage, DrinksPage, ServicesPage, SpeechPage):
+        for F in (StartPage, DishPage, DrinksPage, ServicesPage, PaymentPage, SpeechPage):
             page_name = F.__name__
             frame = F(root=self.container, controller=self, frame_size=frame_size)
             self.frames[page_name] = frame
@@ -49,9 +50,16 @@ class SampleApp(Tk):
         if page_name == 'SpeechPage':
             self.frames['SpeechPage'] = SpeechPage(root=self.container, controller=self, frame_size=frame_size)
             self.frames['SpeechPage'].grid(row=0, column=0, sticky="nsew")
+        elif page_name == 'PaymentPage':
+            self.frames['PaymentPage'] = PaymentPage(root=self.container, controller=self, frame_size=frame_size)
+            self.frames['PaymentPage'].grid(row=0, column=0, sticky="nsew")
+
+
         self.current_frame = self.frames[page_name]
         self.current_frame.tkraise()
 
+    def get_order_pages(self):
+        return [self.frames['DishPage'], self.frames['DrinksPage'], self.frames['ServicesPage']]
 
 if __name__ == "__main__":
     app = SampleApp()

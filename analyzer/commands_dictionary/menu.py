@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 menu = {
     'dishes': {
         'TuttyFrutty' : {
@@ -120,10 +122,9 @@ menu = {
     },
 
 }
-# -*- coding: utf-8 -*-
-
-
 
 menu_pages = {
-    'DishPage': 'dishes',
+    'DishPage':     'dishes',
+    'DrinksPage':   'drinks',
+    'ServicesPage': 'services'
 }

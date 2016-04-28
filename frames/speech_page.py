@@ -100,10 +100,9 @@ class SpeechPage(Frame, CommonFrameMixin, AnalyzeFrameMixin):
             result_queue.put(("Переход", result))
         else:
             result_queue.put(('Ничего не нашлось', None))
-            sleep(1.0)
-            self.move_to_page()
 
     def move_to_page(self, found_page=None):
+        print('show page %s' % str(self.back_page))
         self._controller.show_frame(self.back_page)
         if found_page:
             self._controller.current_frame.show_frame(found_page)

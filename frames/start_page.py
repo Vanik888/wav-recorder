@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from tkinter import Button, PhotoImage, Frame, Label
+from tkinter import Button, PhotoImage, Frame
 
 
 class StartPage(Frame):
@@ -59,4 +59,5 @@ class StartPage(Frame):
     # кликнули на выбор счета
     def choose_bill_ev(self, ev):
         print('clicked dishes_btn: %s' % self.bill_btn.config('text')[-1])
+        self._controller.show_frame('PaymentPage')
 
