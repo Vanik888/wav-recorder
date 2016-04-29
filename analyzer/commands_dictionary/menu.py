@@ -82,7 +82,7 @@ menu = {
             'image_path': './stat/inteface_images/latte.png'
         },
         'IceLatte' : {
-            'name': "Айс лате",
+            'name': "Айс латте",
             'price': 240,
             'count': 0,
             'description': "Кофе с мороженым",
