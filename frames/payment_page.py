@@ -16,6 +16,7 @@ class PaymentPage(Frame, CommonFrameMixin):
         btns_txt_len = 20
 
         self.header = Label(self, text=header_txt, anchor='se', font=("Helvetica", 16, "bold"))
+        self.btn_font = self.get_bnt_font()
 
         self._child_frame_size = {'height': 380, 'width': 880}
         self.child_frame = PaymentTableFrame(root=self, frame_size=self._child_frame_size, data=self.get_data())
@@ -24,11 +25,11 @@ class PaymentPage(Frame, CommonFrameMixin):
         self.total_price_lbl = Label(self, text=total_price_txt, font=("Helvetica", 20, "bold"))
 
         self.pay_btn_img = PhotoImage(file='./stat/inteface_images/money.png')
-        self.pay_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Оплатить'), image=self.pay_btn_img, compound='right')
+        self.pay_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Оплатить'), image=self.pay_btn_img, compound='right', font=self.btn_font)
         self.pay_btn.bind('<Button-1>', self.pay_ev)
 
         self.return_btn_img = PhotoImage(file='./stat/inteface_images/back.png')
-        self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right')
+        self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right', font=self.btn_font)
         self.return_btn.bind('<Button-1>', self.return_ev)
 
 

@@ -13,6 +13,7 @@ from menu.base_order_item import BaseOrderItem
 class BaseOrderPage(Frame, CommonFrameMixin):
     def __init__(self, *args, **kwargs):
         Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
+
         self._root = kwargs['root']
         self._controller = kwargs['controller']
         self._frame_size = kwargs['frame_size']
@@ -25,21 +26,21 @@ class BaseOrderPage(Frame, CommonFrameMixin):
 
         # Длина сторки с текстом на кнопке
         btns_txt_len = 20
-
+        self.btn_font = self.get_bnt_font()
         self.speech_btn_img = PhotoImage(file='./stat/inteface_images/speak.png')
-        self.speech_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Говорите'), image=self.speech_btn_img, compound='right')
+        self.speech_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Говорите'), image=self.speech_btn_img, compound='right', font=self.btn_font)
         self.speech_btn.bind('<Button-1>', self.speech_ev)
 
         self.return_btn_img = PhotoImage(file='./stat/inteface_images/back.png')
-        self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right')
+        self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right', font=self.btn_font)
         self.return_btn.bind('<Button-1>', self.return_ev)
 
         self.add_btn_img = PhotoImage(file='./stat/inteface_images/add.png')
-        self.add_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Добавить'), image=self.add_btn_img, compound='right')
+        self.add_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Добавить'), image=self.add_btn_img, compound='right', font=self.btn_font)
         self.add_btn.bind('<Button-1>', self.add_ev)
 
         self.remove_btn_img = PhotoImage(file='./stat/inteface_images/remove.png')
-        self.remove_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Убрать'), image=self.remove_btn_img, compound='right')
+        self.remove_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Убрать'), image=self.remove_btn_img, compound='right', font=self.btn_font)
         self.remove_btn.bind('<Button-1>', self.remove_ev)
 
 
