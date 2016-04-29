@@ -31,7 +31,7 @@ class PaymentPage(Frame, CommonFrameMixin):
         self.return_btn_img = PhotoImage(file='./stat/inteface_images/back.png')
         self.return_btn = Button(self, text=self.add_spaces_to_str(btns_txt_len, 'Назад'), image=self.return_btn_img, compound='right', font=self.btn_font)
         self.return_btn.bind('<Button-1>', self.return_ev)
-
+        
 
         self.get_data()
         self.place_content()
@@ -80,8 +80,18 @@ class PaymentPage(Frame, CommonFrameMixin):
 
     def pay_ev(self, ev):
         print('clicked pay_btn')
+        self.clean_order_list()
 
     def return_ev(self, ev):
         print('clicked return_btn')
         self._controller.show_frame('StartPage')
         self.destroy()
+
+    def clean_order_list(self):
+        for p in self._controller.get_order_pages():
+            # обнуляем объекты заказа
+            for f in p.get_orders_set():
+                f.reset()
+            # очищяем лейблы, к которым привязаны объекты заказа
+            for k,v in p.frames.items():
+                v.update_dish_lbl()
