@@ -9,7 +9,7 @@ from frames.comon_frame_mixin import CommonFrameMixin
 
 class PaymentTableFrame(Frame, CommonFrameMixin):
     def __init__(self, *args, **kwargs):
-        Frame.__init__(self, kwargs['root'], background='green', **kwargs['frame_size'])
+        Frame.__init__(self, kwargs['root'], **kwargs['frame_size'])
         self._root = kwargs['root']
         self._frame_size = kwargs['frame_size']
 

@@ -33,20 +33,21 @@ class DishImageFrame(Frame, CommonFrameMixin):
 
         x_diff = (self._frame_size['width'] - name_lbl_size['width'] - image_lbl_size['width'])/3
 
+
         self.dish_name_lbl.place(x=x_diff, y=20, **name_lbl_size)
         self.dish_img_lbl.place(x=name_lbl_size['width'] + 2*x_diff, y=0)
         self.dish_description_lbl.place(x=x_diff, y=20+name_lbl_size['height'] + 5, **description_size)
-        self.dish_price_lbl.place(x=x_diff, y=20+name_lbl_size['height'] + 5 + description_size['height'] + 5, **price_lbl_size)
+        if not self.dish.name == 'Официант':
+            self.dish_price_lbl.place(x=x_diff, y=20+name_lbl_size['height'] + 5 + description_size['height'] + 5, **price_lbl_size)
         self.count_lbl.place(x=x_diff, y=self._frame_size['height']-count_lbl_size['height'], **count_lbl_size)
 
     def add_dish(self):
-        self.dish.count += 1
+        self.dish.add_item()
         self.update_dish_lbl()
 
     def remove_dish(self):
-        if self.dish.count > 0:
-            self.dish.count -= 1
-            self.update_dish_lbl()
+        self.dish.remove_item()
+        self.update_dish_lbl()
 
     def get_price_str(self):
         price = str(self.dish.price)
